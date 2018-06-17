@@ -1,0 +1,104 @@
+from tkinter import *
+from rsa_enc import encrypt
+from rsa_dec import decrypt
+from genkeys import generisi_kljuceve
+
+class RSAGraphicInterface:
+	def __init__(self, master):
+		self.master = master
+		master.title("RSA Algoritam")
+		master.geometry('640x480')
+
+		self.genkey_button = Button(master, text="Generisi kljuceve", command=self.create_new_key_files)
+		self.genkey_button.grid(column=0, row=0)
+
+		self.privkey_input = Text(master, height=8, width=60)
+		self.pk_lbl = Label(master, text="Privatni kljuc: ")
+		self.pk_lbl.grid(column=0, row=1)
+		self.privkey_input.grid(column=1, row=1)
+
+		self.publkey_input = Text(master, height=8, width=60)
+		self.pubk_lbl = Label(master, text="Javni kljuc: ")
+		self.pubk_lbl.grid(column=0, row=2)
+		self.publkey_input.grid(column=1, row=2)
+
+		self.m_lbl = Label(master, text="String za enkripciju/dekripciju: ")
+		self.m_lbl.grid(column=0, row=3)
+		self.m_input = Text(master, height=5, width=60)
+		self.m_input.grid(column=1, row=3)
+
+		self.enkript_button = Button(master, text="Enkriptuj javnim klucem: ", command=self.enkriptuj)
+		self.enkript_button.grid(column=0, row=4)
+
+		self.dekript_button = Button(master, text="Dekriptuj privatnim kljucem", command=self.dekriptuj)
+		self.dekript_button.grid(column=1, row=4)
+
+		self.c_lbl = Label(master, text="Rezultat: ")
+		self.c_lbl.grid(column=0, row=5)
+		self.c_input = Text(master, height=5, width=60)
+		self.c_input.grid(column=1, row=5)
+
+		self.close_button = Button(master, text="Close", command=master.quit)
+
+	def create_new_key_files(self):
+		# passphrase = simpledialog.askstring("Passphrase", "Unesite seed za generisanje kluceva",
+                                # parent=self.master)
+        # None if passphrase == None or passphrase.strip() == "" else passphrase
+		private_key, public_key = generisi_kljuceve()
+
+		private_file = open("privatni.kljuc.txt", mode="wt")
+		public_file = open("javni.kljuc.txt", mode="wt")
+
+		private_file.write("{}\n{}".format(private_key[0], private_key[1]))
+		public_file.write("{}\n{}".format(public_key[0], public_key[1]))
+
+		self.privkey_input.config(state = NORMAL)
+		self.privkey_input.delete(1.0, END);
+		self.privkey_input.insert(END, "Privatni kljuc d \n\n{}\n\nModuo N\n\n{}".format(private_key[0], private_key[1]) );
+		self.privkey_input.config(state = DISABLED)
+		
+		self.publkey_input.config(state = NORMAL)
+		self.publkey_input.delete(1.0, END);
+		self.publkey_input.insert(END, "Javni eksponent e \n\n{}\n\nModuo N\n\n{}".format(public_key[0], public_key[1]) );
+		self.publkey_input.config(state = DISABLED)
+
+		private_file.close()
+		public_file.close()
+
+		return private_key, public_key
+
+	def load_key_files(self):
+		private_file = open("./privatni.kljuc.txt", mode="rt")
+		public_file = open("./javni.kljuc.txt", mode="rt")
+
+		private_key = tuple([int(line.strip()) for line in private_file])
+		public_key = tuple([int(line.strip()) for line in public_file])
+
+		private_file.close()
+		public_file.close()
+
+		# assert int(public_key[1]) > 0
+		return private_key, public_key
+
+	def enkriptuj(self):
+		pubkey, privkey = self.load_key_files()
+
+		m = self.m_input.get(1.0, END).strip()
+		c = encrypt(m, pubkey)
+
+		self.c_input.delete(1.0, END)
+		self.c_input.insert(END, c)
+	
+
+	def dekriptuj(self):
+		pubkey, privkey = self.load_key_files()
+
+		m = self.m_input.get(1.0, END).strip()
+		c = decrypt(m, privkey)
+
+		self.c_input.delete(1.0, END)
+		self.c_input.insert(END, c)
+
+root = Tk()
+my_gui = RSAGraphicInterface(root)
+root.mainloop()
