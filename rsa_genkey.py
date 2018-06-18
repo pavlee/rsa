@@ -21,7 +21,7 @@ def fermat_test(n, k):
 def prost_broj():
     
     veliki_broj = rand.randint(10**149, (10**150)-1)
-    # veliki_broj = rand.getrandbits(512)
+    
     if veliki_broj % 2 == 0: veliki_broj -= 1
 
     while not fermat_test(veliki_broj, 100) and veliki_broj < 10**150:
@@ -47,14 +47,9 @@ def get_eksponent(N_veliko):
     return exp
 
 def get_d(a, mod):
-    """Returns the multiplicative d of a, mod (mod)."""
     assert fractions.gcd(a, mod) == 1
 
     def obrnuti_euklidov(a, b):
-        """Returns the solution (x, y) to [ax + by = gcd(a, b)].
-
-        Credit to page 937 of the textbook.
-        """
         if b == 0:
             return (1, 0)
         else:
@@ -71,11 +66,6 @@ def generisi_kljuceve():
     moduo = pq[0] * pq[1]
     eksponent = get_eksponent(fi(pq))
     d = get_d(eksponent, fi(pq))
-
-    # assert pq[0] < eksponent and pq[1] < eksponent
-    # assert math.floor(math.log10(moduo)) + 1 == 300
-    # assert fi(pq) % 2 == 0
-    # assert eksponent < moduo
 
     return [(d, moduo), (eksponent, moduo)]
 

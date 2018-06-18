@@ -39,20 +39,7 @@ class RSAGraphicInterface:
 		self.c_input.grid(column=1, row=5)
 
 		self.close_button = Button(master, text="Close", command=master.quit)
-	"""
-	def create_new_key_files(self):
-
-		private_file = open("privatni.kljuc.txt", mode="wt")
-		public_file = open("javni.kljuc.txt", mode="wt")
-
-		private_file.write("{}\n{}".format(self.private_key[0], self.private_key[1]))
-		public_file.write("{}\n{}".format(self.public_key[0], self.public_key[1]))
-
-		private_file.close()
-		public_file.close()
-
-		return private_key, public_key
-	"""
+	
 	def get_kljucevi(self):
 
 		self.private_key, self.public_key = generisi_kljuceve()
@@ -67,20 +54,7 @@ class RSAGraphicInterface:
 		self.publkey_input.insert(END, "Javni eksponent e \n\n{}\n\nModuo N\n\n{}".format(self.public_key[0], self.public_key[1]) );
 		self.publkey_input.config(state = DISABLED)
 
-	"""
-	def load_key_files(self):
-		private_file = open("./privatni.kljuc.txt", mode="rt")
-		public_file = open("./javni.kljuc.txt", mode="rt")
-
-		private_key = tuple([int(line.strip()) for line in private_file])
-		public_key = tuple([int(line.strip()) for line in public_file])
-
-		private_file.close()
-		public_file.close()
-
-		# assert int(public_key[1]) > 0
-		return private_key, public_key
-	"""
+	
 	def enkriptuj(self):
 
 		m = self.m_input.get(1.0, END).strip()

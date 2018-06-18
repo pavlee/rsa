@@ -8,7 +8,6 @@ sifrovani_text = ""
 
 def decrypt(sifrovani_text, key):
 
-    # Break text into blokovi by BLOK_CIFRE
     blokovi = []
     for i, blok in enumerate(sifrovani_text[::BLOK_CIFRE]):
         start = BLOK_CIFRE * i
@@ -18,7 +17,7 @@ def decrypt(sifrovani_text, key):
     dekriptovani_ascii_chari = []
 
     for blok in blokovi:
-        blok_karakters = []
+        blok_karakteri = []
         dekriptovani_blok = pow(int(blok), key[0], key[1])
 
         dekriptovani_string = str(dekriptovani_blok)
@@ -28,9 +27,9 @@ def decrypt(sifrovani_text, key):
             # Evaluate 3 digits at a time to convert to string.
             char = chr(d_n_copy % 10**3)
             d_n_copy //= 10**3
-            blok_karakters.insert(0, char)
+            blok_karakteri.insert(0, char)
 
-        dekriptovani_ascii_chari.extend(blok_karakters)
+        dekriptovani_ascii_chari.extend(blok_karakteri)
     dekriptovana_poruka = "".join(dekriptovani_ascii_chari)
     return dekriptovana_poruka
 
