@@ -1,5 +1,4 @@
 import math
-import fractions
 import random as rand
 
 # fermat test za proste brojeve, k - broj testova, sto je veci to je veca vjerovatnoca da je test tacan
@@ -41,13 +40,13 @@ def get_eksponent(N_veliko):
     exp = rand.randint(10**160, 10**200)
     if exp % 2 == 0: exp -= 1
 
-    while fractions.gcd(exp, N_veliko) != 1:
+    while math.gcd(exp, N_veliko) != 1:
         exp += 2
     
     return exp
 
 def get_d(a, mod):
-    assert fractions.gcd(a, mod) == 1
+    assert math.gcd(a, mod) == 1
 
     def obrnuti_euklidov(a, b):
         if b == 0:
